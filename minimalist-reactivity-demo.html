@@ -72,7 +72,7 @@
 
                         .filter(attribute => attribute.name.startsWith('@'))
 
-                        .map(attribute => {
+                        .forEach(attribute => {
                             let event = attribute.name.replace('@', '');
                             this.addEventListener(event, el);
                         });
