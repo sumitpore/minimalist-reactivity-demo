@@ -62,12 +62,22 @@
                 this.walkDom(this.root, el => {
 
                     if( el.hasAttribute('@click') ) {
-                        
+
                         let expression = el.getAttribute('@click');
 
-                        el.addEventListener('click', () => {
-                            evaluateExpression(expression, this.methodsAndData);
-                        });
+                        if(typeof this.methodsAndData[expression] === 'function') {
+
+                            el.addEventListener('click', (eventObject) => {
+                                this.methodsAndData[expression].apply(this.methodsAndData, [eventObject]);
+                            });
+
+                        } else {
+
+                            el.addEventListener('click', () => {
+                                evaluateExpression(expression, this.methodsAndData);
+                            });
+
+                        }
 
                     }
 
