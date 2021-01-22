@@ -13,6 +13,12 @@
 
         class Minimalist {
 
+            directives = {
+                'm-text': (el, value) => {
+                    el.innerText = value
+                }
+            }
+            
             constructor({el, data, methods}) {
                 this.root = document.querySelector(el);
                 this.methodsAndData = this.observe({...data, ...methods});
@@ -38,7 +44,7 @@
 
                     if( el.hasAttribute('m-text') ) {
                         let expression = el.getAttribute('m-text');
-                        el.innerText = evaluateExpression(expression, this.methodsAndData);
+                        this.directives['m-text'](el, evaluateExpression(expression, this.methodsAndData))
                     }
                 });
             }
@@ -72,7 +78,7 @@
                         });
 
                 }); 
-                             
+
             }
 
             addEventListener(event, el) {
