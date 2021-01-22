@@ -15,8 +15,21 @@
 
             constructor({el, data, methods}) {
                 this.root = document.querySelector(el);
-                this.methodsAndData = {...data, ...methods};
+                this.methodsAndData = this.observe({...data, ...methods});
                 this.refreshDom();
+            }
+
+            observe(rawData) {
+
+                return new Proxy(rawData, {
+
+                    set: (rawData, key, value) => {
+                        rawData[key] = value;
+                        this.refreshDom();
+                    }
+                    
+                });
+
             }
 
             refreshDom() {
@@ -77,6 +90,8 @@
                 }
             }
         });
+
+        minimalist.methodsAndData.count = 4;
     </script>
 </body>
 </html>
