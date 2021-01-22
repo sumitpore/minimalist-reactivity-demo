@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+
+    <div id="app">
+        <button @click="resetCount">Reset</button>
+        <button @click="count += 1">+</button>
+        <button @click="count -= 1">-</button>
+        <span v-text="count"></span>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            
+            data: {
+                count: 0
+            },
+
+            methods: {
+                resetCount: function(event) {
+                    this.count = 0;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
