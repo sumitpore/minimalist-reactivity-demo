@@ -4,6 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <script>
+
+        function evaluateExpression(expression, scope) {
+            return eval(`with (scope) { (${expression}); }`);
+        }
+
+        class Minimalist {
+
+            constructor({el, data, methods}) {
+                this.root = document.querySelector(el);
+                this.methodsAndData = {...data, ...methods};
+                this.refreshDom();
+            }
+
+            refreshDom() {
+                this.walkDom(this.root, el => {
+
+                    if( el.hasAttribute('m-text') ) {
+                        let expression = el.getAttribute('m-text');
+                        el.innerText = evaluateExpression(expression, this.methodsAndData);
+                    }
+                });
+            }
+
+            walkDom(el, callback) {
+
+                callback(el);
+
+                el = el.firstElementChild;
+
+                while(el) {
+
+                    this.walkDom(el, callback);
+
+                    el = el.nextElementSibling;
+                }
+
+            }
+
+        }
+    </script>
 </head>
 <body>
 
@@ -16,5 +58,25 @@
 
     <script src="./console-dom-library.js"></script>
 
+    <script>
+        let minimalist = new Minimalist({
+            el: '#app',
+            
+            data: {
+                count: 0
+            },
+
+            methods: {
+                resetCount: function(event) {
+                    this.count = 0;
+                    this.printConsole(this.count);
+                },
+
+                printConsole: function(text) {
+                    console.log(text);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
