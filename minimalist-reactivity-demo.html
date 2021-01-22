@@ -17,6 +17,7 @@
                 this.root = document.querySelector(el);
                 this.methodsAndData = this.observe({...data, ...methods});
                 this.refreshDom();
+                this.scanEventListeners();
             }
 
             observe(rawData) {
@@ -55,6 +56,22 @@
                     el = el.nextElementSibling;
                 }
 
+            }
+
+            scanEventListeners() {
+                this.walkDom(this.root, el => {
+
+                    if( el.hasAttribute('@click') ) {
+                        
+                        let expression = el.getAttribute('@click');
+
+                        el.addEventListener('click', () => {
+                            evaluateExpression(expression, this.methodsAndData);
+                        });
+
+                    }
+
+                });              
             }
 
         }
