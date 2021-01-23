@@ -1,5 +1,9 @@
 function evaluateExpression(expression, scope) {
-    return eval(`with (scope) { (${expression}); }`);
+    return eval(
+            `with (scope) { 
+                (${expression});
+            }`
+    );
 }
 
 class Minimalist {
@@ -33,10 +37,14 @@ class Minimalist {
     refreshDom() {
         this.walkDom(this.root, el => {
 
-            if (el.hasAttribute('m-text')) {
-                let expression = el.getAttribute('m-text');
-                this.directives['m-text'](el, evaluateExpression(expression, this.methodsAndData))
-            }
+            Array.from(el.attributes)
+
+                .filter(attribute => attribute.name.startsWith('m-'))
+
+                .forEach(directive => {
+                    let expression = directive.value;
+                    this.directives[directive.name](el, evaluateExpression(expression, this.methodsAndData))
+                });
 
         });
     }
