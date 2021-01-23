@@ -47,6 +47,7 @@
                         let expression = el.getAttribute('m-text');
                         this.directives['m-text'](el, evaluateExpression(expression, this.methodsAndData))
                     }
+
                 });
             }
 
@@ -123,6 +124,7 @@
             },
 
             methods: {
+
                 resetCount: function (event) {
                     this.count = 0;
                     this.printConsole(this.count);
@@ -131,6 +133,7 @@
                 printConsole: function (text) {
                     console.log(text);
                 }
+
             }
         });
 
