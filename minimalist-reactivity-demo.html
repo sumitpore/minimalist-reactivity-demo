@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,10 +19,10 @@
                     el.innerText = value
                 }
             }
-            
-            constructor({el, data, methods}) {
+
+            constructor({ el, data, methods }) {
                 this.root = document.querySelector(el);
-                this.methodsAndData = this.observe({...data, ...methods});
+                this.methodsAndData = this.observe({ ...data, ...methods });
                 this.refreshDom();
                 this.scanEventListeners();
             }
@@ -34,7 +35,7 @@
                         rawData[key] = value;
                         this.refreshDom();
                     }
-                    
+
                 });
 
             }
@@ -42,7 +43,7 @@
             refreshDom() {
                 this.walkDom(this.root, el => {
 
-                    if( el.hasAttribute('m-text') ) {
+                    if (el.hasAttribute('m-text')) {
                         let expression = el.getAttribute('m-text');
                         this.directives['m-text'](el, evaluateExpression(expression, this.methodsAndData))
                     }
@@ -55,7 +56,7 @@
 
                 el = el.firstElementChild;
 
-                while(el) {
+                while (el) {
 
                     this.walkDom(el, callback);
 
@@ -77,15 +78,15 @@
                             this.addEventListener(event, el);
                         });
 
-                }); 
+                });
 
             }
 
             addEventListener(event, el) {
-                
+
                 let expression = el.getAttribute(`@${event}`);
 
-                if(typeof this.methodsAndData[expression] === 'function') {
+                if (typeof this.methodsAndData[expression] === 'function') {
 
                     el.addEventListener(event, (eventObject) => {
                         this.methodsAndData[expression].apply(this.methodsAndData, [eventObject]);
@@ -103,6 +104,7 @@
         }
     </script>
 </head>
+
 <body>
 
     <div id="app">
@@ -112,29 +114,27 @@
         <span m-text="count"></span>
     </div>
 
-    <script src="./console-dom-library.js"></script>
-
     <script>
         let minimalist = new Minimalist({
             el: '#app',
-            
+
             data: {
                 count: 0
             },
 
             methods: {
-                resetCount: function(event) {
+                resetCount: function (event) {
                     this.count = 0;
                     this.printConsole(this.count);
                 },
 
-                printConsole: function(text) {
+                printConsole: function (text) {
                     console.log(text);
                 }
             }
         });
 
-        minimalist.methodsAndData.count = 4;
     </script>
 </body>
+
 </html>
